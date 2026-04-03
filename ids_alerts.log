@@ -1,0 +1,2 @@
+{'level': 'HIGH', 'type': 'BRUTE_FORCE', 'source': '::1', 'message': '9 failed SSH login attempts'}
+{'level': 'HIGH', 'type': 'SUSPICIOUS_LOGIN', 'source': '::1', 'message': 'Login success after multiple failures'}

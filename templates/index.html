@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IDS Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial; background: #0d1117; color: white; }
+        .card { padding: 15px; margin: 10px; display: inline-block; background: #161b22; border-radius: 10px; }
+        .high { color: red; font-weight: bold; }
+        .medium { color: orange; font-weight: bold; }
+        table { width: 100%; margin-top: 20px; }
+        th, td { padding: 10px; border-bottom: 1px solid #30363d; }
+        a { color: cyan; margin-right: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>🚨 IDS Dashboard</h1>
+
+<div class="card">Total Alerts: {{ total }}</div>
+<div class="card">Brute Force: {{ brute }}</div>
+<div class="card">Port Scan: {{ port }}</div>
+<div class="card">Web Attacks: {{ web }}</div>
+<div class="card">Suspicious Login: {{ suspicious }}</div>
+
+<h3>Filter:</h3>
+<a href="/">All</a>
+<a href="/?type=BRUTE_FORCE">Brute Force</a>
+<a href="/?type=SUSPICIOUS_LOGIN">Suspicious Login</a>
+<a href="/?type=PORT_SCAN">Port Scan</a>
+
+<canvas id="chart" width="400" height="200"></canvas>
+
+<script>
+const data = {
+    labels: ["Brute Force", "Suspicious Login", "Port Scan", "Web"],
+    datasets: [{
+        label: "Attacks",
+        data: [{{ brute }}, {{ suspicious }}, {{ port }}, {{ web }}]
+    }]
+};
+
+new Chart(document.getElementById("chart"), {
+    type: "bar",
+    data: data
+});
+</script>
+
+<h2>Alert Details</h2>
+
+<table>
+<tr>
+    <th>Level</th>
+    <th>Type</th>
+    <th>Source</th>
+    <th>Message</th>
+</tr>
+
+{% for alert in alerts %}
+<tr>
+    <td class="{{ 'high' if alert.level == 'HIGH' else 'medium' }}">{{ alert.level }}</td>
+    <td>{{ alert.type }}</td>
+    <td>{{ alert.source }}</td>
+    <td>{{ alert.message }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>
